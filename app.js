@@ -7,6 +7,7 @@ const app = express();
 app.set('view engine', 'pug');
 
 app.use(morgan('dev'));
+app.use(express.urlencoded())
 app.use(router);
 
 app.use((req, res, next) => {
