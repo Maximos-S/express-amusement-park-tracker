@@ -1,8 +1,11 @@
 const express = require("express");
-
+const db = require('./db/models')
 const router = express.Router();
 
-const {environment} = require("./config/index.js")
+
+const { environment } = require("./config/index.js")
+
+const asyncHandler = (handler) => (req, res, next) => handler(req, res, next).catch(next);
 
 router.get("/", (req, res) => {
     res.render("index", { title: "Home" })
@@ -14,5 +17,10 @@ router.get("/", (req, res) => {
         })
       } 
 
-
+router.get('/parks', asyncHandler(async (req, res) => {
+  const parks = await db.Park.findAll({
+    order: ['parkName']
+  })
+  res.render('park-list', {parks})
+}));
 module.exports = {router}
